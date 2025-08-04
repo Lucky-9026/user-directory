@@ -1,0 +1,211 @@
+<div style="
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0d0b2f 0%, #1c1245 40%, #2d1b60 100%);
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+  padding: 3rem 2rem;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+">
+
+  <!-- Floating decorative circles (adjust colors to fit new bg) -->
+  <div style="
+    position: absolute;
+    top: 12%;
+    left: 14%;
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(46, 232, 127, 0.3));
+    border-radius: 50%;
+    filter: blur(0.5px) drop-shadow(0 0 15px rgba(46, 232, 127, 0.6));
+    animation: floatRotate1 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+    transform-style: preserve-3d;
+  "></div>
+  <div style="
+    position: absolute;
+    top: 68%;
+    left: 77%;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.08), rgba(46, 232, 127, 0.25));
+    border-radius: 50%;
+    filter: blur(0.5px) drop-shadow(0 0 12px rgba(46, 232, 127, 0.5));
+    animation: floatRotate2 10s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+    transform-style: preserve-3d;
+  "></div>
+
+  <!-- Centered Heading -->
+  <h2 style="
+    font-weight: 900;
+    font-size: 3rem;
+    letter-spacing: 0.15em;
+    color: #2ee87f;
+    text-align: center;
+    margin-bottom: 3rem;
+    text-transform: uppercase;
+    text-shadow:
+      0 0 6px #2ee87f,
+      0 0 12px #2ee87f,
+      0 0 20px #10c44f,
+      0 0 30px #10c44f;
+    user-select: text;
+    filter: drop-shadow(0 0 6px #2ee87f);
+    background: rgba(0, 0, 0, 0.15);
+    padding: 0.3rem 1.2rem;
+    border-radius: 16px;
+    width: fit-content;
+    position: relative;
+    z-index: 10;
+  ">
+    USER DIRECTORY
+  </h2>
+
+  <div *ngIf="isLoading" style="
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 22px;
+    padding: 1.8rem 2.5rem;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+    animation: slideIn 0.6s ease-out;
+    max-width: 320px;
+    margin: 2rem auto;
+    user-select: none;
+  ">
+    <span style="
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid #2ee87f;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      margin-right: 14px;
+      animation: spin 1.2s linear infinite;
+      display: inline-block;
+    "></span>
+    Loading users...
+  </div>
+
+  <div *ngIf="errorMessage" style="
+    color: #ff6b6b;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 240, 240, 0.95));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    font-weight: 600;
+    margin: 1rem auto;
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 8px 32px rgba(255, 107, 107, 0.2);
+    animation: slideIn 0.5s ease-out;
+  ">
+    <span style="
+      margin-right: 12px;
+      font-size: 1.2rem;
+      filter: drop-shadow(0 2px 4px rgba(255, 107, 107, 0.3));
+    ">⚠️</span> 
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && users.length" style="
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    justify-content: center;
+    padding: 2rem;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    animation: slideIn 0.8s ease-out 0.3s both;
+  ">
+    <div *ngFor="let user of users" style="
+      background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      backdrop-filter: blur(30px);
+      border-radius: 22px;
+      padding: 2.5rem 2rem;
+      box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.15),
+        inset 0 0 40px rgba(46, 232, 127, 0.15);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      text-align: center;
+      transform-style: preserve-3d;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    "
+    onmouseover="this.style.transform='translateY(-8px) rotateX(3deg) rotateY(3deg) scale(1.03)'; this.style.boxShadow='0 25px 50px rgba(0,0,0,0.2), inset 0 0 50px rgba(46,232,127,0.35)';"
+    onmouseout="this.style.transform='none'; this.style.boxShadow='0 12px 40px rgba(0,0,0,0.15), inset 0 0 40px rgba(46,232,127,0.15)';"
+    >
+
+      <!-- User Avatar Circle -->
+      <div style="
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), rgba(46, 232, 127, 0.25));
+        margin: 0 auto 1.3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 6px 22px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      ">
+        {{ user.name.charAt(0).toUpperCase() }}
+      </div>
+
+      <!-- User Name with neon gradient text -->
+      <a [routerLink]="['/users', user.id]" style="
+        text-decoration: none;
+        color: transparent;
+        font-weight: 700;
+        font-size: 1.4rem;
+        background: linear-gradient(45deg, #2ee87f, #10c44f);
+        -webkit-background-clip: text;
+        background-clip: text;
+        transition: color 0.3s ease;
+        user-select: text;
+        display: block;
+        margin-bottom: 0.25rem;
+      "
+      onmouseover="this.style.filter='drop-shadow(0 0 6px #2ee87f)';"
+      onmouseout="this.style.filter='none';"
+      >
+        {{ user.name }}
+      </a>
+
+      <!-- User email in subtle neon tint -->
+      <p style="
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #a9f7bf;
+        margin-top: 0;
+        letter-spacing: 0.01em;
+        user-select: text;
+        word-break: break-word;
+      ">
+        {{ user.email }}
+      </p>
+    </div>
+  </div>
+
+</div>

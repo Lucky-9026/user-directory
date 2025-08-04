@@ -1,0 +1,297 @@
+<div style="
+  --primary:#4ade80;
+  --primary-dark:#22c55e;
+  --accent:#22d3ee;
+  --accent-dark:#06b6d4;
+  --text-light:#e0f2fe;
+  --text-dark:#0f172a;
+  --bg-start:#0f172a;
+  --bg-end:#1e293b;
+  --glass-bg: rgba(255 255 255 / 0.1);
+  --glass-border: rgba(255 255 255 / 0.25);
+  min-height:100vh;
+  padding:3rem 1.5rem;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+  color: var(--text-light);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  perspective:1300px;
+  overflow:hidden;
+  position:relative;
+">
+
+  <!-- Particle background - minimal inline SVG -->
+  <svg style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0;" aria-hidden="true">
+    <defs>
+      <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.7" />
+        <stop offset="100%" stop-color="var(--primary)" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+    <circle cx="25%" cy="30%" r="40" fill="url(#glow)">
+      <animate attributeName="cx" values="25%;35%;25%" dur="20s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="30%;25%;30%" dur="20s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="80%" cy="70%" r="30" fill="url(#glow)">
+      <animate attributeName="cx" values="80%;85%;80%" dur="15s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="70%;65%;70%" dur="15s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="50%" cy="50%" r="60" fill="url(#glow)" />
+  </svg>
+
+  <section *ngIf="user && !isLoading" role="region" aria-label="User Details Card"
+  tabindex="0"
+  style="
+    --card-glass: var(--glass-bg);
+    --card-border: var(--glass-border);
+    --shadow-color: rgba(34, 197, 94, 0.7);
+    width: 400px;
+    max-width: 95vw;
+    background: var(--card-glass);
+    border-radius: 28px;
+    padding: 2rem 2rem 2rem 2rem;  /* reduced padding */
+    box-shadow:
+      0 0 30px var(--shadow-color),
+      inset 0 0 60px rgba(255 255 255 / 0.15);
+    border: 1.5px solid var(--card-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: var(--text-light);
+    text-shadow: 0 0 6px rgba(0,0,0,0.4);
+    transform-style: preserve-3d;
+    cursor: default;
+    user-select: none;
+    transition: box-shadow 0.35s ease, transform 0.35s ease;
+    will-change: transform, box-shadow;
+    outline-offset: 8px;
+    font-variant-ligatures: common-ligatures discretionary-ligatures;
+    font-feature-settings: 'liga', 'calt';
+    letter-spacing: 0.02em;
+    font-weight: 600;
+    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.3));
+    animation: fadeInUp 0.75s ease forwards;
+    margin: auto;
+  "
+  onmousemove="(e=>{
+    const t=e.currentTarget;
+    const r=t.getBoundingClientRect();
+    const x=e.clientX - r.left - r.width/2;
+    const y=e.clientY - r.top - r.height/2;
+    const rotateX = (-y / r.height) * 12;  /* slightly less rotation */
+    const rotateY = (x / r.width) * 12;
+    t.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px)`; /* less z translate */
+    t.style.boxShadow = `
+      0 0 35px var(--shadow-color),
+      inset 0 0 80px rgba(255 255 255 / 0.25),
+      0 8px 20px rgba(0, 0, 0, 0.25)
+    `;
+  })(event)"
+  onmouseleave="(e=>{
+    const t=e.currentTarget;
+    t.style.transform = 'none';
+    t.style.boxShadow = '0 0 30px var(--shadow-color), inset 0 0 60px rgba(255 255 255 / 0.15)';
+  })(event)"
+>
+ <h3 style="
+  font-weight: 900;
+  font-size: 2.2rem;
+  letter-spacing: 0.16em;
+  color: #2ee87f; /* bright neon green */
+  text-align: center;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 6px #2ee87f,
+    0 0 12px #2ee87f,
+    0 0 20px #10c44f,
+    0 0 30px #10c44f;
+  user-select: text;
+  filter: drop-shadow(0 0 6px #2ee87f);
+  background: rgba(0, 0, 0, 0.1); /* subtle dark translucent backdrop */
+  padding: 0.1rem 0.6rem;
+  border-radius: 12px;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+">
+  USER DETAILS
+</h3>
+
+
+  <dl style="margin:0;">
+
+    <!-- Name -->
+    <div style="display:flex; align-items:center; margin-bottom:1.5rem; user-select:none;">
+      <dt aria-label="Name Icon" style="
+        flex-shrink:0;
+        width:36px;   /* smaller circle */
+        height:36px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        border-radius: 50%;
+        box-shadow:
+          0 0 15px var(--primary),
+          inset 0 0 5px #fff9;
+        color: white;
+        font-size: 20px;
+        text-align:center;
+        line-height: 36px;
+        filter: drop-shadow(0 0 4px var(--primary));
+        user-select:none;
+      ">👤</dt>
+      <dd style="
+        margin-left:1rem;  /* less gap */
+        font-weight: 800;
+        font-size: 1.1rem;  /* smaller font */
+        letter-spacing: 0.01em;
+        color: var(--text-light);
+        text-shadow: 0 0 4px rgba(0,0,0,0.15);
+        text-transform: capitalize;
+        user-select:text;
+        line-height: 1.3;
+      ">{{ user.name }}</dd>
+    </div>
+
+    <!-- Email -->
+    <div style="display:flex; align-items:center; margin-bottom:1.5rem; user-select:none;">
+      <dt aria-label="Email Icon" style="
+        flex-shrink:0;
+        width:36px;
+        height:36px;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+        border-radius: 50%;
+        box-shadow:
+          0 0 15px var(--accent),
+          inset 0 0 5px #fff9;
+        color: white;
+        font-size: 20px;
+        text-align:center;
+        line-height: 36px;
+        filter: drop-shadow(0 0 4px var(--accent));
+        user-select:none;
+      ">📧</dt>
+      <dd style="
+        margin-left:1rem;
+        font-weight: 600;
+        font-size: 1rem;
+        color: var(--text-light);
+        word-break: break-word;
+        letter-spacing: 0.01em;
+        line-height: 1.3;
+        user-select:text;
+      ">{{ user.email }}</dd>
+    </div>
+
+    <!-- Phone -->
+    <div style="display:flex; align-items:center; margin-bottom:1.5rem; user-select:none;">
+      <dt aria-label="Phone Icon" style="
+        flex-shrink:0;
+        width:36px;
+        height:36px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        border-radius: 50%;
+        box-shadow:
+          0 0 15px var(--primary),
+          inset 0 0 5px #fff9;
+        color: white;
+        font-size: 20px;
+        text-align:center;
+        line-height: 36px;
+        filter: drop-shadow(0 0 4px var(--primary));
+        user-select:none;
+      ">📞</dt>
+      <dd style="
+        margin-left:1rem;
+        font-weight: 600;
+        font-size: 1rem;
+        letter-spacing: 0.01em;
+        line-height: 1.3;
+        user-select:text;
+        color: var(--text-light);
+      ">{{ user.phone }}</dd>
+    </div>
+
+    <!-- Website -->
+    <div style="display:flex; align-items:center; user-select:none;">
+      <dt aria-label="Website Icon" style="
+        flex-shrink:0;
+        width:36px;
+        height:36px;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+        border-radius: 50%;
+        box-shadow:
+          0 0 15px var(--accent),
+          inset 0 0 5px #fff9;
+        color: white;
+        font-size: 18px;
+        text-align:center;
+        line-height: 36px;
+        filter: drop-shadow(0 0 4px var(--accent));
+        user-select:none;
+      ">🌐</dt>
+      <dd style="
+        margin-left:1rem;
+        font-weight: 600;
+        font-size: 1rem;
+        letter-spacing: 0.01em;
+        line-height: 1.3;
+        user-select:text;
+        color: var(--text-light);
+        text-transform: lowercase;
+      "><a href="http://{{ user.website }}" target="_blank" rel="noopener" style="color: var(--accent); text-decoration:none; transition: all 0.25s ease;">{{ user.website }}</a></dd>
+    </div>
+  </dl>
+
+  <a href="/" role="button" aria-label="Go back to home" style="
+    display:inline-block;
+    margin-top: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    color: var(--primary);
+    text-shadow: 0 0 5px var(--primary);
+    padding: 0.7rem 2rem;
+    border-radius: 40px;
+    border: 2.5px solid var(--primary);
+    background: transparent;
+    cursor: pointer;
+    user-select:none;
+    transition: all 0.3s ease;
+    box-shadow:
+      inset 0 0 10px var(--primary),
+      0 4px 10px rgba(34, 197, 94, 0.5);
+    filter: drop-shadow(0 0 5px var(--primary));
+    text-align:center;
+    text-decoration:none;
+    outline:none;
+  "
+    onmouseenter="this.style.background= 'var(--primary)'; this.style.color = 'var(--text-dark)'; this.style.boxShadow = '0 6px 15px var(--primary)';"
+    onmouseleave="this.style.background= 'transparent'; this.style.color = 'var(--primary)'; this.style.boxShadow='inset 0 0 10px var(--primary), 0 4px 10px rgba(34, 197, 94, 0.5)';"
+    onfocus="this.style.outline='3px solid var(--primary)'; this.style.outlineOffset='4px';"
+    onblur="this.style.outline='none';"
+  >← Back</a>
+</section>
+
+  <p *ngIf="isLoading" style="color: var(--text-light); font-size: 1.5rem; font-weight: 600; text-shadow: 0 0 8px rgba(0,0,0,0.3); user-select:none; animation: pulse 1.5s infinite;">
+    Loading...
+  </p>
+
+  <style>
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 30px, 0);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+</div>
